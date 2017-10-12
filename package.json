@@ -1,0 +1,25 @@
+{
+  "name": "azure-fileuploader-function",
+  "version": "1.0.0",
+  "description": "Simple Azure function written in Node JS that removes Blobs in Azure Storage",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/synle/azure-fileuploader-function.git"
+  },
+  "private": true,
+  "scripts": {},
+  "engines": {
+    "node": "6.10.0"
+  },
+  "dependencies": {
+    "azure-storage": "^2.5.0",
+    "sequelize": "^3.28.0",
+    "tedious": "^2.0.0"
+  },
+  "devDependencies": {},
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/synle/azure-fileuploader-function/issues"
+  },
+  "homepage": "https://github.com/synle/azure-fileuploader-function#readme"
+}
