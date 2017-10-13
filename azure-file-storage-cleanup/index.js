@@ -7,23 +7,20 @@ var blobSvc = blobUtil.getBlobSrvc();
 
 
 module.exports = function (context) {
-    context.log('1 - azure starting');
-
-    context.log('2 - azure connecting db');
+    context.log('1 - Azure Starting - Connecting Azure SQL DB');
 
     fileResourceUtil.getAllDeletedFiles().then(
         function(files){
-            context.log('3 - total deleted files count');
-            context.log(files.length);
+            context.log('2 - Deleted Files Count: ', files.length);
 
+            const promisesDeleteBlob = files.map(function(file){
+                const fileId = file.id;
+                const userId = file.userId;
+                const azureContainer = file.azureContainer;
+                const azureFileName = file.azureName;
+                const stringFriendlyLog = ` userId=${userId} fileId=${fileId}, azureContainer=${azureContainer}, azureFileName=${azureFileName}`;
 
-            context.log('4 - ready to clean up');
-            var promisesDeleteBlob = files.map(function(file){
-                var fileId = file.id;
-                var azureContainer = file.azureContainer;
-                var azureFileName = file.azureName;
-
-                context.log('Attempt to delete: ', fileId, azureContainer, azureFileName);
+                context.log(`3 - ATTEMPT to Delete: ${stringFriendlyLog}`);
 
                 return new Promise(function(resolve){
                     blobSvc.deleteBlob(
@@ -32,9 +29,9 @@ module.exports = function (context) {
                         function(error, response){
                             if(!error){
                                 // Blob has been deleted
-                                context.log('SUCCESS Deleted Blob', azureContainer, azureFileName);
+                                context.log(`4 - SUCCESS Deleted Blob: ${stringFriendlyLog}`);
                             } else {
-                                context.log('FAILED Deleted Blob', azureContainer, azureFileName);
+                                context.log(`4 - FAILED Deleted Blob: ${stringFriendlyLog}`);
                             }
 
                             // doing hard delete for the file
@@ -52,7 +49,7 @@ module.exports = function (context) {
             // finally
             Promise.all(promisesDeleteBlob)
                 .then(function(){
-                    context.log('Finished clean up data...');
+                    context.log('DONE - Finished clean up data...');
                     context.done();
                 })
         }
