@@ -12,6 +12,8 @@ module.exports = function (context) {
     fileResourceUtil.getAllDeletedFiles().then(
         function(files){
             context.log('2 - Deleted Files Count: ', files.length);
+            let totalSuccess = 0;
+            let totalFail = 0;
 
             const promisesDeleteBlob = files.map(function(file){
                 const fileName = file.name;
@@ -31,8 +33,10 @@ module.exports = function (context) {
                             if(!error){
                                 // Blob has been deleted
                                 context.log(`4 - SUCCESS Deleted Blob: ${stringFriendlyLog}`);
+                                totalSuccess++;
                             } else {
                                 context.log(`4 - FAILED Deleted Blob: ${stringFriendlyLog}`);
+                                totalFail++;
                             }
 
                             // doing hard delete for the file
@@ -50,7 +54,7 @@ module.exports = function (context) {
             // finally
             Promise.all(promisesDeleteBlob)
                 .then(function(){
-                    context.log('DONE - Finished clean up data...');
+                    context.log(`DONE - Finished clean up data: totalSuccess=${totalSuccess}, totalFail=${totalFail}`);
                     context.done();
                 })
         }
