@@ -14,11 +14,12 @@ module.exports = function (context) {
             context.log('2 - Deleted Files Count: ', files.length);
 
             const promisesDeleteBlob = files.map(function(file){
+                const fileName = file.name;
                 const fileId = file.id;
                 const userId = file.userId;
                 const azureContainer = file.azureContainer;
                 const azureFileName = file.azureName;
-                const stringFriendlyLog = ` userId=${userId} fileId=${fileId}, azureContainer=${azureContainer}, azureFileName=${azureFileName}`;
+                const stringFriendlyLog = ` fileName=${fileName} userId=${userId} fileId=${fileId}, azureContainer=${azureContainer}, azureFileName=${azureFileName}`;
 
                 context.log(`3 - ATTEMPT to Delete: ${stringFriendlyLog}`);
 
